@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//com/wdk/stock/bdaiapi/bdknowledgegraph.py=utf-8
+encoding//com/wdk/stock/bdaiapi/bdnlplexer.py=utf-8
+encoding//com/wdk/stock/nlp/__init__.py=utf-8
+encoding//com/wdk/stock/nlp/baiketoken.py=utf-8
+encoding//com/wdk/stock/nlp/myconfig.py=utf-8
+encoding//com/wdk/stock/nlp/tfidftest.py=utf-8
+encoding/<project>=utf-8
