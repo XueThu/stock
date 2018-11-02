@@ -1,13 +1,20 @@
 import pymysql  
+import re
 from com.wdk.stock.eventanalysis.eventcomments import stock_code
 #导入 pymysql 
 #打开数据库连接
 
-db= pymysql.connect(host="60.205.202.141",\
-                    user="work",\
-                    password="Wjbb12345",\
-                    db="stock",\
-                    port=3306) 
+db_file_config=[]
+with open('database_config', 'r') as f:
+    for line in f.readlines():
+        line = re.sub("\\(.*\\)|\\{.*?}|\\[.*?]|\\\n", "", line)
+        db_file_config.append(line)
+    
+db= pymysql.connect(host=db_file_config[0], \
+                    user=db_file_config[1], \
+                    password=db_file_config[2], \
+                    db=db_file_config[3], \
+                    port=int(db_file_config[4])) 
 # 使用cursor()方法获取操作游标
 cur = db.cursor() 
 #1.查询操作
