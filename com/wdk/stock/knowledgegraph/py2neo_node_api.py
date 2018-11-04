@@ -4,14 +4,37 @@ from py2neo import Graph, Node, Relationship
 from py2neo.matching import NodeMatcher, RelationshipMatcher
 from py2neo.ogm import Label
 
+# 参考： https://blog.csdn.net/sinat_26917383/article/details/79901207
+
 # 连接neo4j数据库
 graph = Graph("http://127.0.0.1:7474",username="neo4j",password="X111111")
 node_matcher = NodeMatcher(graph)
 
 """
-# START: 创建Label
-# 一个Node上叠加多个Label
-# 删除Label暂时无解,只能删除节点
+# *********START：Label操作集及示例************
+
+# node关于label的API：
+# labels() 返回node的标签的集合
+# has_label(label) node是否有这个标签
+# add_label(label) 给node添加标签
+# remove_label(label) 删除node的标签
+# clear_labels() 清楚node的所有标签
+# update_labels(labels) 添加多个标签，注labels为可迭代的
+
+# hash(relationship) 返回一个关系的hash值
+# relationship[key] 返回关系的属性值
+# relationship[key] = value 设定关系的属性值
+# del relationship[key] 删除关系的属性值
+# len(relationship) 返回关系的属性值数目
+# dict(relationship) 以字典的形式返回关系的所有属性
+# walk(relationship) 返回一个生成器包含起始node、关系本身、终止node
+# type() 返回关系type
+
+
+# START: 创建Label,可以Label()，但似乎也要和node在一起操作，否则没办法push到graph
+# 一个Node上叠加多个Label：node.add_label('labelname_x')
+# 删除graph的label暂时无解,只能把所有节点的该label删除
+
 testLabel3 = Label()
 # name属性是label的唯一标识
 testLabel3.name = "测试产品分类3"
@@ -31,7 +54,10 @@ else:
         graph.push(test_node)
         print(test_node.labels)
 # END: 创建Label
+
+# *********END：Label操作集及示例************
 """
+
 
 
 """
@@ -86,7 +112,7 @@ node2['别称'] = '临时称呼'
 graph.push(node2)
 print(graph.nodes[1733])
 
-#多属性批量更新
+#多属性批量更新节点
 data = {
     'stockID': '002',
     '别称': '惠州TCL'
@@ -97,12 +123,12 @@ print(graph.nodes[1733])
 #END：更新节点属性
 """
 
-"""
+# """
 #START：删除节点后，关系自动删除了
-node2 = graph.nodes[1713]
+node2 = graph.nodes[79296]
 graph.delete(node2)
-relationship = graph.match_one(rel_type='KNOWS')
-graph.delete(relationship)
+# relationship = graph.match_one(rel_type='KNOWS')
+# graph.delete(relationship)
 #END：删除节点或关系
 """
 
@@ -174,5 +200,6 @@ data = graph.run('MATCH (p:产品) RETURN p LIMIT 5')
 print(list(data))
 
 # match(s:上市公司) where s.name="科陆电子"  return s
+# MATCH p=()-[r:`公司属于概念板块`]->() RETURN p LIMIT 25
 #END:运行Neo4j命令
 """

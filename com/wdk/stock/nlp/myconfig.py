@@ -3,11 +3,19 @@ import json
 
 from aip import AipNlp
 import requests
+import re
+
+baiduai_config=[]
+with open('baiduai_config', 'r') as f:
+    for line in f.readlines():
+        line = re.sub("\\(.*\\)|\\{.*?}|\\[.*?]|\\\n", "", line)
+        baiduai_config.append(line)
+    
+APP_ID = baiduai_config[0]
+API_KEY = baiduai_config[1]
+SECRET_KEY = baiduai_config[1]
 
 
-APP_ID = '11198235'
-API_KEY = 'cgRgGeh2X4RMZLNWYCP3IEva'
-SECRET_KEY = 'ROMQxxOeyd6O2NLGpyZlw6lA24Qa6uAx'
 bd_client = AipNlp(APP_ID, API_KEY, SECRET_KEY)
 
 urltoken ='https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials'\
