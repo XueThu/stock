@@ -21,15 +21,6 @@ node_matcher = NodeMatcher(graph)
 # clear_labels() 清楚node的所有标签
 # update_labels(labels) 添加多个标签，注labels为可迭代的
 
-# hash(relationship) 返回一个关系的hash值
-# relationship[key] 返回关系的属性值
-# relationship[key] = value 设定关系的属性值
-# del relationship[key] 删除关系的属性值
-# len(relationship) 返回关系的属性值数目
-# dict(relationship) 以字典的形式返回关系的所有属性
-# walk(relationship) 返回一个生成器包含起始node、关系本身、终止node
-# type() 返回关系type
-
 
 # START: 创建Label,可以Label()，但似乎也要和node在一起操作，否则没办法push到graph
 # 一个Node上叠加多个Label：node.add_label('labelname_x')
@@ -125,8 +116,8 @@ print(graph.nodes[1733])
 
 # """
 #START：删除节点后，关系自动删除了
-node2 = graph.nodes[79296]
-graph.delete(node2)
+# node2 = graph.nodes[79296]
+# graph.delete(node2)
 # relationship = graph.match_one(rel_type='KNOWS')
 # graph.delete(relationship)
 #END：删除节点或关系
@@ -152,10 +143,10 @@ graph.delete(node2)
 # 查询graph中节点label为'产品类型',和其他条件
 # 注意graph.nodes的返回类型其实是NodeMatcher
 # 
-node_list = graph.nodes.match('概念板块')#match只可以查询label和properties
-for datax in node_list:
-    print(datax)
-print(len(node_list))
+# node_list = graph.nodes.match('概念板块')#match只可以查询label和properties
+# for datax in node_list:
+#     print(datax)
+# print(len(node_list))
 
 # node_list = graph.nodes.match('产品类型').where(" _.name = '财务软件' ")
 # node_list = graph.nodes.match('产品类型', name='财务软件' ") #和上面语句是等价的
