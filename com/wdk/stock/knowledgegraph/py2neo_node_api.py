@@ -3,12 +3,16 @@
 from py2neo import Graph, Node, Relationship
 from py2neo.matching import NodeMatcher, RelationshipMatcher
 from py2neo.ogm import Label
+from com.wdk.stock.knowledgegraph.py2neo_advanced_tools import create_node
 
 # 参考： https://blog.csdn.net/sinat_26917383/article/details/79901207
 
 # 连接neo4j数据库
 graph = Graph("http://127.0.0.1:7474",username="neo4j",password="X111111")
 node_matcher = NodeMatcher(graph)
+
+create_node(graph, "自然人", "王麻子")
+create_node(graph, "美食", "鸡翅")
 
 """
 # *********START：Label操作集及示例************
@@ -154,11 +158,19 @@ print(graph.nodes[1733])
 # for datax in node_list:
 #     print(datax)
 
-# 因为name和label无法确定一个node，所以返回是list
+# 因为name加label无法确定一个node，所以返回是list
 # 如果label和id估计可以，因为id属性是node的identity
-# data_list = graph.nodes.match("上市公司", name='TCL集团')
+# 凡是match回来的结果，必须len判断，否则会制造潜在bug
+# data_list = graph.nodes.match("股票名称").where(" _.name = '*ST康达' ")
+# if len(data_list) != 0:
+#     for datax in data_list:
+#         print(datax["name"])
+# else :
+#     print("none")
 # node_matcher = NodeMatcher(graph)
-# data = node_matcher.match("上市公司", name = "TCL集团")
+# data_list = node_matcher.match("股票名称", name = "*ST康达")
+# for datax in data_list:
+#     print(datax)
 # data = graph.nodes.match('测试LabelBeverage')
 
 # if(len( list(data) ) == 0) :
