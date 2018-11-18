@@ -146,6 +146,7 @@ print(graph.nodes[1733])
 # 查询graph中的所有label为'产品类型'的节点
 # 查询graph中节点label为'产品类型',和其他条件
 # 注意graph.nodes的返回类型其实是NodeMatcher
+# graph.match的是relationships
 # 
 # node_list = graph.nodes.match('概念板块')#match只可以查询label和properties
 # for datax in node_list:
@@ -206,3 +207,28 @@ print(list(data))
 # MATCH p=()-[r:`公司属于概念板块`]->() RETURN p LIMIT 25
 #END:运行Neo4j命令
 """
+
+# The following functions need to check
+
+# merge(subgraph, label=None, *property_keys)[source]
+# Run a Transaction.merge() operation within an autocommit Transaction.
+# 
+# Parameters:    
+# subgraph – a Node, Relationship or other Subgraph object
+# label – label on which to match any existing nodes
+# property_keys – property keys on which to match any existing nodes
+
+
+# The following is for test
+# node_list = graph.nodes.match("自然人", name = "庆九")
+# for node in node_list:
+#     if "简介" in node.keys():
+#         print(node['简介'])
+#         relationships = graph.match((node, None), r_type=None)
+#         for relationship in relationships:
+#             print(relationship)
+#     else: 
+#         print("无简历")
+
+print(graph.nodes.__len__())
+print(graph.relationships.__len__())

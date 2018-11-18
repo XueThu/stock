@@ -73,10 +73,39 @@ def check_sotck_has_enterpise():
             for relationship in relationships:
                 print(count, relationship)                
 
-
+# 把“生产销售”关系从股票名称节点移到公司名称节点
+def move_product_relaiton_from_stock_to_company():
+    stock_name_nodes = graph.nodes.match("股票名称")
+    relation_type = "生产销售"
+    
+    if len(stock_name_nodes) != 0:
+        for stock_name_node in stock_name_nodes:
+            stock_company_relationships = graph.match((None, stock_name_node), r_type="股票名称是")
+            if len(stock_company_relationships) != 0:
+                company_name_node = stock_company_relationships.first().start_node
+                result = copy_all_outgoing_relationship(graph, stock_name_node, company_name_node, relation_type)
+                print(result)
+                
+            
+        
+        
+    #list所有待迁移的relation
+#     if len(stock_nodes) != 0:
+#         for stock_node in stock_nodes:
+#             relationships = graph.match((stock_node,None), r_type=relation_name)
+#             print(len(relationships) )
+#             if len(relationships) != 0:
+#                 for relationship in relationships:
+#                     print(relationship)
+#             
+        
 
 
 # merge_same_name_node("股票名称")
 # delete_isolated_node("股票名称")
 # update_stock_name("更名企业.xlsx")
 # check_sotck_has_enterpise()
+# find_same_name_node(graph, "自然人")  
+
+# move_product_relaiton_from_stock_to_company()
+delete_isolated_node("自然人")

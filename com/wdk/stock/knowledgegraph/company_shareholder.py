@@ -6,7 +6,8 @@ import re
 import xlrd
 import time
 from venv import create
-from com.wdk.stock.knowledgegraph.py2neo_advanced_tools import create_node
+from com.wdk.stock.knowledgegraph.py2neo_advanced_tools import create_node,\
+    check_isolated_node
 
 
 compound_surname = ["竹田","胡白","藤野", "欧阳", "令狐", "赫连", "诸葛"]
@@ -18,12 +19,10 @@ file_name = '股东_1102.xls'
 workbook = xlrd.open_workbook(file_name) 
 sheet_names= workbook.sheet_names()
 
-def check_data(sheet_names):
+def add_data_to_graph(sheet_names):
     for sheet_name in sheet_names:
         sheet = workbook.sheet_by_name(sheet_name)
-        manager_key_value={}
         row_count = 0
-        current_year = int(time.strftime('%Y',time.localtime()))
         for rowx in range(1,sheet.nrows):
             row_count += 1
             stock_name = sheet.row_values(rowx)[0]
@@ -54,16 +53,39 @@ def check_data(sheet_names):
             else:
                     share_holder_label = SHARE_HOLDER_LABEL_COMPANY
             
-            share_holder_node = create_node(graph, share_holder_label, share_holder)  
-#             print(row_count, stock_node, share_holder_node )
-            
+            # 如果是企业，企业名是唯一的，遇到同名企业不能再创建节点
+            # 如果是个人，无法判断是否是同一人，先创建新节点，日后根据算法，merge相同的人
+            if share_holder_label == SHARE_HOLDER_LABEL_COMPANY:
+                share_holder_node = create_node(graph, share_holder_label, share_holder)  
+            else:
+                share_holder_node = Node(share_holder_label, name = share_holder)
+                graph.create(share_holder_node)
+                graph.push(share_holder_node)
+                
+            print(row_count, stock_node, share_holder_node )
             
             RELATION_TYPE = "持股"
             relationship = Relationship(share_holder_node, RELATION_TYPE, stock_node)
             relationship["股数"] = share_number
+            relationship["股份类型"] = share_type
             graph.create(relationship)
             graph.push(relationship)
 #             print(row_count, relationship)
             print(row_count)
             
-check_data(sheet_names)
+
+def delete_shareholder():
+    relationships = graph.match((None,None), r_type="持股")
+    for relationship in relationships:
+        share_holder_node = relationship.start_node
+        graph.separate(relationship)
+        # 如果没有任何其他关系，即成为孤儿节点，将被删除
+        if check_isolated_node(graph, share_holder_node) == True:
+            print("孤儿节点，即将被删除：", share_holder_node["name"])
+            graph.delete(share_holder_node)
+        
+        
+add_data_to_graph(sheet_names) 
+# delete_shareholder()
+   
+

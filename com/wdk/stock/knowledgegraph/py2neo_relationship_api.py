@@ -43,6 +43,9 @@ https://py2neo.org/v4/database.html#py2neo.database.Transaction.separate
 # Delete the remote nodes and relationships that correspond to those in a local subgraph. 
 # To delete only the relationships, use the transaction.separate() method.
 
+# 如果两个节点关系相同，再copy或者创建一次并不会形成两个关系，还只有一个；
+# 但如果这两个节点的r_type一样，其上属性不一致的时候是什么情况，还未测试
+
 
 """
 label = '美食'
